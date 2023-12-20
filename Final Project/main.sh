@@ -2,6 +2,24 @@
 
 dir="/home/nadarabea/FinalProject"
 
+function DropTable() {
+        read -p "Enter the Name of Table : " tab
+        if [ -f $dir/$conn/$tab ]
+        then
+                read -p "Are you Sure? (Y | N)" ans
+                if [ $ans=='Y' ] || [ $ans=='y' ]
+                then
+                        rm $dir/$conn/$tab
+                        echo Table was Dropped
+                fi
+        else
+                echo NO Such Table
+        fi
+}
+
+function ListTable() {
+        ls  $dir/$conn
+}
 
 function CreateTable() {
         read -p "Enter Table Name: " tab
