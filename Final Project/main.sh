@@ -1,28 +1,41 @@
-! /usr/bin/bash
+#! /usr/bin/bash
 
-function CreateDB {
-read -p "Enter Name of DB: " db
-mkdir "/home/nada/FinalProject/$db"
-suboptions=("Create file" "Insert" "Update" "Select")
-select choice in "${suboptions[@]}"
-do
-case $choice in
-"Create file") echo Create
-;;
-"Insert") echo List
-;;
-"Update") echo Connect
-;;
-"Select") echo Select
-;;
-*) break
-esac
-done
+dir="/home/nadarabea/FinalProject"
+
+
+function Drop() {
+        read -p "Enter Name of DB you want to drop: " drop
+        if [ -d "$dir/$drop" ]
+        then
+                read -p "Are you Sure? (Y | N) " ans
+                if [ $ans == "Y" ] || [ $ans == "y" ]
+                then
+                        rm -R $dir/$drop
+                        echo "Drop $drop DB"
+                fi
+
+        else
+                echo NO Found DB!
+        fi
 }
 
-options=("Create DB" "List DB" "Connect DB" "Exit")
-select choice in "${options[@]}"
-do
-case $choice in
-"Create DB") CreateDB ; echo $?
-;;
+
+
+
+select choice in "Create DB" "List DB" "Connect DB" "Drop DB" ;do
+        case $choice in
+                "Create DB") CreateDB
+                        ;;
+                "List DB")  List
+                        ;;
+                "Connect DB")  Connect
+                        ;;
+                "Drop DB")  Drop
+                        ;;
+                *)exit
+        esac
+done
+
+~                                                                                                                             
+~                                                                                                                             
+~
