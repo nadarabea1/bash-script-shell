@@ -2,6 +2,45 @@
 
 dir="/home/nadarabea/FinalProject"
 
+
+function CreateTable() {
+        read -p "Enter Table Name: " tab
+        declare -a "$tab"=""
+        if [ -f $dir/$conn/$tab ]
+        then
+                echo "There is Table with the same name ;( "
+        else
+                touch $dir/$conn/$tab
+                echo "Table Created ;) "        
+
+
+
+
+                read -p "Enter the number of colums : " cols
+                printf '#' > $dir/$conn/$tab
+                ans='n'
+                for ((i=1; i<=$cols; i++))
+                do
+                        read -p "Enter Name of Colum $i: " name
+                        colArr+=("$name")
+                        read -p "Enter Data type(int | string | bool): " dtype
+                        if [ $ans == 'n' ] || [ $ans == 'N' ]
+                        then
+                                read -p "Is primary key (Y|N)? " ans
+                                if [ $ans == 'Y' ] || [ $ans == 'y' ]
+                                then
+                                        name=$name*
+                                fi
+                        fi
+
+                        printf $name-$dtype: >> $dir/$conn/$tab
+                done
+
+                printf '\n' >> $dir/$conn/$tab
+
+        fi
+
+}
 function List() {
         ls -R $dir
 }
