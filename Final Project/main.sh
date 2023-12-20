@@ -2,7 +2,19 @@
 
 dir="/home/nadarabea/FinalProject"
 
+function List() {
+        ls -R $dir
+}
+function CreateDB() {
+        read -p "Enter Name of DB: " crt
+        if [ -d $dir/$db/$crt ]
+        then
+                read -p "Enter another name of DB: " crt
+        else
+                mkdir $dir/$crt
+        fi
 
+}
 function Drop() {
         read -p "Enter Name of DB you want to drop: " drop
         if [ -d "$dir/$drop" ]
