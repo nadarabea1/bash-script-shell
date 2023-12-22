@@ -1,47 +1,72 @@
 #! /usr/bin/bash
-
 dir="/home/nadarabea/FinalProject"
 
 
-function SelectByRow() {
-	tab=$1
-	read -p "Enter the primary key value to Select: " pk_value
+function Insert() {
+        read -p "Enter Table Name : " tab
+        if [ -d $dir/$conn/$tab ]
+        then
+                schema_file="$dir/$conn/$tab/schema"
+                data_file="$dir/$conn/$tab/data"
 
-        schema_file="$dir/$conn/$tab/schema"
 
-        if [ -n "`grep  "^$pk_value" "$dir/$conn/$tab/data"`" ]
-       	then
-		echo `grep  "^$pk_value" "$dir/$conn/$tab/data"`
+                read -p "Enter the primary key value to Insert: " pk_value
 
-        else
-            echo "Record with primary key '$pk_value' does not exist."
-        fi
 
-}
-
-function SelectByCol() {
-        tab=$1
-        read -p "Enter Column : " col
-
-        schema_file="$dir/$conn/$tab/schema"
-
-        columns=$(grep "Columns:" "$schema_file" | cut -d ':' -f 2)
-        IFS=',' read -ra column_array <<< "$columns"
-
-        declare -i i
-        for ((i = 0; i < ${#column_array[@]}; i++))
-        do
-                column="${column_array[$i]}"
-                if [ $column == $col  ]
+                if grep -q "^$pk_value" "$data_file"
                 then
-                        break
-
+                        echo "Record with primary key '$pk_value' already exists. Insertion aborted."
+                        return
                 fi
-        done
 
-        i=$i+1
-        cut -d" " -f$i $dir/$conn/$tab/data
+
+                columns=$(grep "Columns:" "$schema_file" | cut -d ':' -f 2)
+                datatypes=$(grep "Datatypes:" "$schema_file" | cut -d ':' -f 2)
+                primary_key=$(grep "Primarykey:" "$schema_file" | cut -d ':' -f 2)
+
+
+                declare -A column_values
+                declare -A Value_array
+
+                IFS=',' read -ra column_array <<< "$columns"
+                IFS=',' read -ra datatype_array <<< "$datatypes"
+
+                for ((i = 0; i < ${#column_array[@]}; i++))
+                do
+                        column="${column_array[$i]}"
+                        datatype="${datatype_array[$i]}"
+
+                        read -p "Enter value for $column ($datatype): " value
+
+                        case $datatype in
+                                "int")
+                                        if ! [[ "$value" =~ ^[0-9]+$ ]]; then
+                                                echo "Invalid input for $column. Must be an integer."
+                                                return
+                                        fi
+                                        ;;
+                                "string")
+                                        ;;
+                                *)
+                                        echo "Unsupported data type: $data_type"
+                                        return
+                                        ;;
+                        esac
+
+                        values_array+=("$value")
+                done
+
+                values_str=$(IFS=" " ; echo "${values_array[*]}")
+
+                echo "$values_str" >> "$data_file"
+                values_array=()
+
+                echo "Record inserted successfully."
+        else
+                echo not found '$tab' table
+        fi
 }
+
 
 function Update() {
     read -p "Enter the table name: " tab
