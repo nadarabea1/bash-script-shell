@@ -2,6 +2,22 @@
 
 dir="/home/nadarabea/FinalProject"
 
+function Delete() {
+	read -p "Enter the table name: " tab
+
+	if [ -d "$dir/$conn/$tab" ]; then
+		read -p "Enter the primary key value to delete: " pk_value
+		if grep -q "^$pk_value " "$dir/$conn/$tab/data"; then
+			sed -i "/^$pk_value /d" "$dir/$conn/$tab/data"
+			echo "Row deleted successfully."
+		else
+		       	echo "Record with primary key '$pk_value' does not exist."
+		fi
+	else
+		echo "Table '$tab' does not exist."
+	fi
+}
+
 function DropTable() {
         read -p "Enter the Name of Table : " tab
         if [ -d $dir/$conn/$tab ]
