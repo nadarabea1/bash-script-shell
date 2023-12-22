@@ -2,6 +2,29 @@
 
 dir="/home/nadarabea/FinalProject"
 
+function Select() {
+	read -p "Enter Table Name: " tab
+	if [ -d $dir/$conn/$tab ]
+	then
+		select choice in "Select by Column" "Select by Row" "Select All"
+                	do
+                        	case $choice in
+                                	"Select by Column") SelectByCol $tab	
+						;;
+					"Select by Row") SelectByRow $tab
+						;;
+					"Select All")
+						cat $dir/$conn/$tab/data
+						;;
+					*) break
+                        	esac
+        	done
+	else 
+		echo No found Table
+	fi
+
+}
+
 function Delete() {
 	read -p "Enter the table name: " tab
 
