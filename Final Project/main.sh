@@ -2,6 +2,47 @@
 
 dir="/home/nadarabea/FinalProject"
 
+
+function SelectByRow() {
+	tab=$1
+	read -p "Enter the primary key value to Select: " pk_value
+
+        schema_file="$dir/$conn/$tab/schema"
+
+        if [ -n "`grep  "^$pk_value" "$dir/$conn/$tab/data"`" ]
+       	then
+		echo `grep  "^$pk_value" "$dir/$conn/$tab/data"`
+
+        else
+            echo "Record with primary key '$pk_value' does not exist."
+        fi
+
+}
+
+function SelectByCol() {
+        tab=$1
+        read -p "Enter Column : " col
+
+        schema_file="$dir/$conn/$tab/schema"
+
+        columns=$(grep "Columns:" "$schema_file" | cut -d ':' -f 2)
+        IFS=',' read -ra column_array <<< "$columns"
+
+        declare -i i
+        for ((i = 0; i < ${#column_array[@]}; i++))
+        do
+                column="${column_array[$i]}"
+                if [ $column == $col  ]
+                then
+                        break
+
+                fi
+        done
+
+        i=$i+1
+        cut -d" " -f$i $dir/$conn/$tab/data
+}
+
 function Update() {
     read -p "Enter the table name: " tab
 
