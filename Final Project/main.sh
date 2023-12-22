@@ -41,6 +41,39 @@ function CreateTable() {
 	fi
 }
 
+function Connect() {
+	read -p "Enter Name of DB you to connect : " conn;
+	if [ -d "$dir/$conn" ]
+	then
+		
+		select choice in "Create Table" "List Tables" "Drop Table" "Insert" "Select from Table" "Delete" "Update"
+		do
+			case $choice in 
+				"Create Table")CreateTable
+					;;
+				"List Tables") ListTable
+					;;
+				"Drop Table") DropTable
+					;;
+				"Insert") Insert
+					;;
+				"Select from Table") Select
+					;;
+				"Delete") Delete
+					;;
+				"Update") Update
+					;;
+				*)break
+					;;
+			esac
+
+		done
+	else 
+		echo Not found DB!
+	fi
+}
+
+
 function List() {
         ls -R $dir
 }
