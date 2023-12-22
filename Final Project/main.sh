@@ -2,6 +2,59 @@
 
 dir="/home/nadarabea/FinalProject"
 
+function Update() {
+    read -p "Enter the table name: " tab
+
+    if [ -d "$dir/$conn/$tab" ]; then
+        read -p "Enter the primary key value to update: " pk_value
+
+	schema_file="$dir/$conn/$tab/schema"
+
+        if grep -q "^$pk_value " "$dir/$conn/$tab/data"; then
+		columns=$(grep "Columns:" "$schema_file" | cut -d ':' -f 2)
+                datatypes=$(grep "Datatypes:" "$schema_file" | cut -d ':' -f 2)
+
+
+		declare -A column_values
+		declare -A row
+
+                IFS=',' read -ra column_array <<< "$columns"
+                IFS=',' read -ra datatype_array <<< "$datatypes"
+                for ((i = 0; i < ${#column_array[@]}; i++)); do
+                        column="${column_array[$i]}"
+                        datatype="${datatype_array[$i]}"
+
+                        read -p "Enter value for $column ($datatype): " value
+
+
+                case $datatype in
+                    int)
+                        if ! [[ "$value" =~ ^[0-9]+$ ]]; then
+                            echo "Invalid value for $column. Expected $datatype."
+                            return
+                        fi
+                        ;;
+                    string)
+                        ;;
+                    *)
+                        echo "Unknown data type: $coltype."
+                        return
+                        ;;
+                esac
+                row["$column"]=$value
+            done
+
+	    
+            sed -i "s/^$pk_value .*/${row[*]}/" "$dir/$conn/$tab/data"
+            echo "Row updated successfully."
+        else
+            echo "Record with primary key '$pk_value' does not exist."
+        fi
+    else
+        echo "Table '$tab' does not exist."
+    fi
+}
+
 function Select() {
 	read -p "Enter Table Name: " tab
 	if [ -d $dir/$conn/$tab ]
