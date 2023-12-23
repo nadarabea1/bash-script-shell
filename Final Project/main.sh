@@ -63,7 +63,7 @@ function Insert() {
 
                 echo "Record inserted successfully."
         else
-                echo not found '$tab' table
+                echo "not found '$tab' table"
         fi
 }
 
@@ -81,7 +81,7 @@ function Update() {
                 datatypes=$(grep "Datatypes:" "$schema_file" | cut -d ':' -f 2)
 
 
-		declare -A column_values
+
 		declare -A row
 
                 IFS=',' read -ra column_array <<< "$columns"
@@ -110,8 +110,9 @@ function Update() {
                 row["$column"]=$value
             done
 
-	    
-            sed -i "s/^$pk_value .*/${row[*]}/" "$dir/$conn/$tab/data"
+	    replace=`grep $pk_value $dir/$conn/$tab/data`
+            sed -i "s/^$replace*/${row[*]}/" "$dir/$conn/$tab/data"
+            
             echo "Row updated successfully."
         else
             echo "Record with primary key '$pk_value' does not exist."
@@ -271,13 +272,13 @@ function Connect() {
 
 
 function List() {
-        ls -R $dir
+        ls`` $dir
 }
 function CreateDB() {
         read -p "Enter Name of DB: " crt
         if [ -d $dir/$db/$crt ]
         then
-                read -p "Enter another name of DB: " crt
+                echo "There is DB with '$crt' name"
         else
                 mkdir $dir/$crt
                 echo "DB '$crt' created successfully"
