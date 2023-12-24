@@ -1,5 +1,4 @@
 # Bash Shell Script Database Management System (DBMS)
-![e5c094fb64328e294845979be2115758](https://github.com/nadarabea1/bash-script-shell-labs/assets/89930688/a5cc573c-b664-4fd2-bf8d-7d054fca9cf5)
 
 ## Project Overview
 
