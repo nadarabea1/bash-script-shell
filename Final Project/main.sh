@@ -112,7 +112,7 @@ function Update() {
 
 	    replace=`grep $pk_value $dir/$conn/$tab/data`
             sed -i "s/^$replace*/${row[*]}/" "$dir/$conn/$tab/data"
-            
+
             echo "Row updated successfully."
         else
             echo "Record with primary key '$pk_value' does not exist."
@@ -206,7 +206,7 @@ function DropTable() {
                 read -p "Are you Sure? (Y | N)" ans
                 if [ $ans == 'Y' ] || [ $ans == 'y' ]
                 then
-                        rm $dir/$conn/$tab
+                        rm -r $dir/$conn/$tab
                         echo "Table '$tab' dropped successfully."
                 fi
         else
