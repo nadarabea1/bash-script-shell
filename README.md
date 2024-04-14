@@ -1,5 +1,12 @@
 # Bash Shell Script Database Management System (DBMS)
 
+##Demo Video
+
+https://github.com/nadarabea1/bash-script-shell/assets/89930688/9eadff73-6ec5-4eec-99d2-eff8889982d0
+
+
+
+
 ## Project Overview
 
 The Bash Shell Script DBMS is a command-line interface (CLI) based application designed to enable users to store and retrieve data from the hard disk. The project focuses on providing essential database management functionalities through a user-friendly menu system.
